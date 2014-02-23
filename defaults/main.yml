@@ -1,0 +1,8 @@
+---
+# defaults file
+
+# add commands to ~/.bash_profile and ~/.bashrc for Homebrew 
+build_dotfiles: True
+
+# Homebrew should be setup for use with bash
+bash_shell: True

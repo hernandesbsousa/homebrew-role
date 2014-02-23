@@ -1,0 +1,46 @@
+---
+# OS X Homebrew Package Manager Setup
+
+# Assumes: 
+# + GCC installed via XCode comamnd line tools (https://connect.apple.com)
+
+# Homebrew - OSX package manager
+# brew --version ~ 0.9.5
+- name: Install Homebrew via official ruby installer script
+  raw: ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
+  register: homebrew_result
+  # changed_when: "homebrew_result != 1"
+  failed_when: "homebrew_result.rc != 0 and 'Homebrew is already installed' not in homebrew_result.stderr"
+# Successful installs return 0. Running when already installed returns 1 and writes
+# to stderr, but we wish to consider this specific error a success.
+
+- name: Add Homebrew package executables home (/usr/local/bin) to PATH
+  lineinfile: dest=~/.bash_profile line="export PATH=/usr/local/bin:\$PATH"
+  when: build_dotfiles
+  tags:
+    - build_dotfiles
+
+- name: Add Homebrew tab completion to bash
+  lineinfile: dest=~/.bashrc line="source $(brew --repository)/Library/Contributions/brew_bash_completion.sh"
+  when: build_dotfiles and bash_shell
+  tags:
+    - build_dotfiles
+    - bash
+# Notes:
+# Homebrew placed under '/usr/local' so package installs don't require sudo.
+# Individual brew packages (kegs) isolated in their own directory under 
+# '/usr/local/Cellar'
+# Symlinks to brew package executables are located in '/usr/local/bin'.
+# Usage:
+# brew list                  # list all installed packages
+# brew search partial-name   # search for available packages
+# brew info pkg-name         # get information about a package
+# brew install/uninstall pkg # install/uninstall a package
+# brew update                # update package lists and Homebrew
+# brew upgrade               # upgrade packages you have installed
+# brew upgrade pkg-name      # upgrade a specific package
+# Taps stored in '/usr/local/Library/Taps'
+# brew tap                   # list tapped repositories
+# brew tap tapname           # add tap
+# brew untap tapname         # remove a tap
+
