@@ -15,7 +15,7 @@
 # to stderr, but we wish to consider this specific error a success.
 
 - name: Add Homebrew package executables home (/usr/local/bin) to PATH
-  lineinfile: dest=~/.bash_profile line="export PATH=/usr/local/bin:\$PATH"
+  lineinfile: dest=~/.bash_profile line="export PATH=/usr/local/bin:$PATH"
   when: build_dotfiles
   tags:
     - build_dotfiles
