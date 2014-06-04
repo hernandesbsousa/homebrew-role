@@ -15,13 +15,13 @@
 # to stderr, but we wish to consider this specific error a success.
 
 - name: Add Homebrew package executables home (/usr/local/bin) to PATH
-  lineinfile: dest=~/.bash_profile line="export PATH=/usr/local/bin:$PATH"
+  lineinfile: dest=~/.bash_profile line="export PATH=/usr/local/bin:$PATH" create=yes
   when: build_dotfiles
   tags:
     - build_dotfiles
 
 - name: Add Homebrew tab completion to bash
-  lineinfile: dest=~/.bashrc line="source $(brew --repository)/Library/Contributions/brew_bash_completion.sh"
+  lineinfile: dest=~/.bashrc line="source $(brew --repository)/Library/Contributions/brew_bash_completion.sh" create=yes
   when: build_dotfiles and bash_shell
   tags:
     - build_dotfiles
